@@ -30,34 +30,18 @@ public:
         return (iss >> x) && iss.eof();
     }
 
-    template<typename T>
-    static T* readFileAndGenerate(std::string filePath, int &size) {
-        if (!filePath.empty() && filePath.front() == '\"' && filePath.back() == '\"') {
-            filePath = filePath.substr(1, filePath.length() - 2);
+    static bool isFloatCheck(std::string filename) {
+        if (filename.empty()) {
+            throw invalid_argument("filename is empty");
         }
-        std::ifstream file(filePath);
-        if (!file.is_open()) {throw std::runtime_error("Nie udało się otworzyć pliku.");}
-        file >> size;
-        if (size <= 0) {throw std::invalid_argument("Niepoprawny rozmiar tablicy");}
-        auto numbers = new T[size];
-        for (int i = 0; i < size; i++) {
-            std::string value;
-            file >> value;  // Read as string first to analyze format
-
-            // Check if the value contains a dot or scientific notation
-            if constexpr (std::is_same<T, float>::value) {
-                numbers[i] = std::stof(value);
-            } else if constexpr (std::is_same<T, int>::value) {
-                if (value.find('.') != std::string::npos || value.find('e') != std::string::npos || value.find('E') != std::string::npos) {
-                    throw std::invalid_argument("Plik zawiera liczby zmiennoprzecinkowe, ale oczekiwano int.");
-                }
-                numbers[i] = std::stoi(value);
-            } else {
-                throw std::invalid_argument("Nieobsługiwany typ danych.");
+        std::ifstream file(filename);
+        std::string line;
+        while (std::getline(file, line)) {
+            if (line.find(',') != std::string::npos || line.find('.') != std::string::npos) {
+                return true;
             }
         }
-
-        return numbers;
+        return false;
     }
 
     static int* readAndGenerateIntTable(std::string& filePath, int& size) {
@@ -104,14 +88,21 @@ public:
             throw std::invalid_argument("Niepoprawny rozmiar tablicy");
         }
         auto numbers = new float[size];
-        float number;
+        std::string numberStr;
         int index = 0;
-        while (file >> number) {
-            if (index >= size) {
+        while (file >> numberStr) {
+            std::replace(numberStr.begin(), numberStr.end(), ',', '.');
+            try {
+                float number = std::stof(numberStr);
+                if (index >= size) {
+                    delete[] numbers;
+                    throw std::invalid_argument("Plik zawiera więcej liczb niz oczekiwano.");
+                }
+                numbers[index++] = number;
+            } catch (const std::invalid_argument& e) {
                 delete[] numbers;
-                throw std::invalid_argument("Plik zawiera więcej liczb niz oczekiwano.");
+                throw std::invalid_argument("Nieprawidłowy format liczby.");
             }
-            numbers[index++] = number;
         }
         if (index < size) {
             delete[] numbers;

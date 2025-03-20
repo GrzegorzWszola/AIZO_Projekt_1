@@ -12,8 +12,8 @@ public:
         while (true) {
             system("cls");
             cout << "Wybierz typ danych:" << endl;
-            cout << (choice == 1 ? "--> " : "    ") << "1. Generuj losowe tablice int" << endl;
-            cout << (choice == 2 ? "--> " : "    ") << "2. Generuj losowe tablice float" << endl;
+            cout << (choice == 1 ? "--> " : "    ") << "1. Generuj dane do sprawozdania int" << endl;
+            cout << (choice == 2 ? "--> " : "    ") << "2. Generuj dane do sprawozdania float" << endl;
             cout << (choice == 3 ? "--> " : "    ") << "3. Testowanie algorytmow" << endl;
             cout << (choice == 4 ? "--> " : "    ") << "4. Wyjscie" << endl;
 

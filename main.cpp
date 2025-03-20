@@ -52,7 +52,21 @@ int main() {
             while (true) {
                 int testChoice = GUI::testGUI();
                 if (testChoice == 1) {
-
+                    floatTable = nullptr;
+                    intTable = nullptr;
+                    std::string input;
+                    cout << "Podaj nazwe pliku: ";
+                    try {
+                        cin >> input;
+                        bool isFloat = Utilities::isFloatCheck(input);
+                        if (isFloat) {
+                            floatTable = Utilities::readAndGenerateFloatTable(input, size);
+                        } else {
+                            intTable = Utilities::readAndGenerateIntTable(input, size);
+                        }
+                    }
+                    catch (invalid_argument &e) {cout << e.what();}
+                    catch (runtime_error &e) {cout << e.what();}
                 }
 
                 if (testChoice == 2) {
