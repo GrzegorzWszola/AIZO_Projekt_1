@@ -3,6 +3,7 @@
 
 #include "Algorythms.h"
 #include "GUI.h"
+#include "RaportGeneration.h"
 #include "Utilities.h"
 using namespace std;
 int main() {
@@ -23,6 +24,8 @@ int main() {
         sortedFloatTable = nullptr;
         auto choice = GUI::consoleStart();
         if (choice == 4) {break;}
+
+        //GENEROWANIE CSV
         if (choice == 1 || choice == 2) {
             cout << "Podaj rozmiar: ";
             while (!(cin >> size)) {
@@ -30,20 +33,45 @@ int main() {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
-            int algChoice = GUI::chooseAlgorythm();
-            if (choice == 1 && algChoice == 1) {
-                auto intTable = Utilities::generateRandomIntArray(size);
-                tableCopies = Utilities::generateTableCopies(size, intTable);
-                Algorythms::InsertionSort(tableCopies[0], size, time);
-                cout << "Time needed to sort random array: " << time << " ms" << endl;
-                Algorythms::InsertionSort(tableCopies[1], size, time);
-                cout << "Time needed to sort random array: " << time << " ms" << endl;
-                if (size <= 100) {
-                    for (int i = 0; i < size; i++) {
-                        cout << tableCopies[0][i] << " ";
-                    }
-                }
-                system("pause");
+
+
+            if (choice == 1) {
+                Utilities::resetOutputFile();
+                Utilities::writeSortType("Insertion Sort;");
+                RaportGeneration::generateDataForSort<int>(size, 1);
+                Utilities::writeSortType("Heap Sort;");
+                RaportGeneration::generateDataForSort<int>(size, 2);
+                Utilities::writeSortType("Shell Sort n/2;");
+                RaportGeneration::generateDataForSort<int>(size, 3);
+                Utilities::writeSortType("Shell Sort optymalne;");
+                RaportGeneration::generateDataForSort<int>(size, 4);
+                Utilities::writeSortType("Quick Sort prawy;");
+                RaportGeneration::generateDataForSort<int>(size, 5);
+                Utilities::writeSortType("Quick Sort lewy;");
+                RaportGeneration::generateDataForSort<int>(size, 6);
+                Utilities::writeSortType("Quick Sort srodkowy;");
+                RaportGeneration::generateDataForSort<int>(size, 7);
+                Utilities::writeSortType("Quick Sort losowy;");
+                RaportGeneration::generateDataForSort<int>(size, 8);
+            }
+            if (choice == 2) {
+                Utilities::resetOutputFile();
+                Utilities::writeSortType("Insertion Sort;");
+                RaportGeneration::generateDataForSort<float>(size, 1);
+                Utilities::writeSortType("Heap Sort;");
+                RaportGeneration::generateDataForSort<float>(size, 2);
+                Utilities::writeSortType("Shell Sort n/2;");
+                RaportGeneration::generateDataForSort<float>(size, 3);
+                Utilities::writeSortType("Shell Sort optymalne;");
+                RaportGeneration::generateDataForSort<float>(size, 4);
+                Utilities::writeSortType("Quick Sort prawy;");
+                RaportGeneration::generateDataForSort<float>(size, 5);
+                Utilities::writeSortType("Quick Sort lewy;");
+                RaportGeneration::generateDataForSort<float>(size, 6);
+                Utilities::writeSortType("Quick Sort srodkowy;");
+                RaportGeneration::generateDataForSort<float>(size, 7);
+                Utilities::writeSortType("Quick Sort losowy;");
+                RaportGeneration::generateDataForSort<float>(size, 8);
             }
         }
 
@@ -73,14 +101,14 @@ int main() {
                     floatTable = nullptr;
                     sortedFloatTable = nullptr;
                     cout << "Podaj rozmiar: "; cin >> size;
-                    intTable = Utilities::generateRandomIntArray(size);
+                    intTable = Utilities::generateRandomArray<int>(size);
                 }
 
                 if (testChoice == 3) {
                     intTable = nullptr;
                     sortedIntTable = nullptr;
                     cout << "Podaj rozmiar: "; cin >> size;
-                    floatTable = Utilities::generateRandomFloatArray(size);
+                    floatTable = Utilities::generateRandomArray<float>(size);
                 }
 
                 if (testChoice == 4 && intTable != nullptr) {
@@ -99,6 +127,48 @@ int main() {
                         cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
                         system("pause");
                     }
+                    if (algChoice == 3) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::ShellSort(sortedIntTable, size, time, true);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 4) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::ShellSort(sortedIntTable, size, time, false);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 5) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::QuickSort(sortedIntTable, size, time, 1);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 6) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::QuickSort(sortedIntTable, size, time, 2);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 7) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::QuickSort(sortedIntTable, size, time, 3);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 8) {
+                        sortedIntTable = new int[size];
+                        memcpy(sortedIntTable, intTable, size*sizeof(int));
+                        Algorythms::QuickSort(sortedIntTable, size, time, 4);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
                 }else if (testChoice == 4 && floatTable != nullptr) {
                     int algChoice = GUI::chooseAlgorythm();
                     if (algChoice == 1) {
@@ -112,6 +182,48 @@ int main() {
                         sortedFloatTable = new float[size];
                         memcpy(sortedFloatTable, floatTable, size*sizeof(float));
                         Algorythms::HeapSort(sortedFloatTable, size, time);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 3) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::ShellSort(sortedFloatTable, size, time, true);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 4) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::ShellSort(sortedFloatTable, size, time, false);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 5) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::QuickSort(sortedFloatTable, size, time, 1);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 6) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::QuickSort(sortedFloatTable, size, time, 2);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 7) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::QuickSort(sortedFloatTable, size, time, 3);
+                        cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
+                        system("pause");
+                    }
+                    if (algChoice == 8) {
+                        sortedFloatTable = new float[size];
+                        memcpy(sortedFloatTable, floatTable, size*sizeof(float));
+                        Algorythms::QuickSort(sortedFloatTable, size, time, 4);
                         cout << "Czas potrzebny do sortowania: " << time << " ms" << endl;
                         system("pause");
                     }
@@ -140,7 +252,23 @@ int main() {
                     }
                     system("pause");
                 }
-                if (testChoice == 7) {break;}
+                if (testChoice == 7 && sortedIntTable != nullptr) {
+                    if (Utilities::isSorted<int>(sortedIntTable, size)) {
+                        cout << "Tablica posortowana" << endl;
+                    } else {
+                        cout << "Tablica nie posortowana" << endl;
+                    }
+                    system("pause");
+                }
+                if (testChoice == 7 && sortedFloatTable != nullptr) {
+                    if (Utilities::isSorted<float>(sortedFloatTable, size)) {
+                        cout << "Tablica posortowana" << endl;
+                    } else {
+                        cout << "Tablica nie posortowana" << endl;
+                    }
+                    system("pause");
+                }
+                if (testChoice == 8) {break;}
             }
         }
 

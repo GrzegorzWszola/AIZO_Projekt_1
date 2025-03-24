@@ -1,8 +1,10 @@
 #ifndef ALGORYTHMS_H
 #define ALGORYTHMS_H
 #include <chrono>
+#include <stack>
 
 class Algorythms {
+private:
     //Funkcja pomocnicza budująca maksymalny kopiec czyli taki który ma na najstarszej pozycji największą liczbę
     template<typename T>
     static void heapify(T a[], int n, int i){
@@ -27,6 +29,70 @@ class Algorythms {
         }
     }
 
+    template<typename T>
+    static void QuickSortRecursive(T a[], int low, int high, int type) {
+        if (low < high) {
+            int pi = Partition(a, low, high, type);
+            QuickSortRecursive(a, low, pi - 1, type);
+            QuickSortRecursive(a, pi + 1, high, type);
+        }
+    }
+
+    template<typename T>
+static void QuickSortIterative(T a[], int low, int high, int type) {
+        std::stack<std::pair<int, int>> stack;
+        stack.push({low, high});  // Zaczynamy od całego zakresu
+
+        while (!stack.empty()) {
+            auto [l, h] = stack.top();  // Pobieramy bieżący zakres
+            stack.pop();  // Usuwamy z stosu
+
+            if (l < h) {
+                // Particjonowanie tablicy wokół pivota
+                int pi = Partition(a, l, h, type);
+
+                // Jeśli lewa część jest większa niż jeden element, dodajemy do stosu
+                if (pi - 1 > l) {
+                    stack.push({l, pi - 1});
+                }
+
+                // Jeśli prawa część jest większa niż jeden element, dodajemy do stosu
+                if (pi + 1 < h) {
+                    stack.push({pi + 1, h});
+                }
+            }
+        }
+    }
+
+    template<typename T>
+    static int Partition(T a[], int low, int high, int type) {
+        int pivotIndex;
+
+        // Wybór pivota
+        switch (type) {
+            case 1: pivotIndex = high; break;             // Skrajny prawy
+            case 2: pivotIndex = low; break;              // Skrajny lewy
+            case 3: pivotIndex = (low + high) / 2; break; // Środkowy element
+            case 4: pivotIndex = low + std::rand() % (high - low + 1); break; // Losowy element
+            default: pivotIndex = high; break;
+        }
+
+        // Przesunięcie pivota na koniec
+        std::swap(a[pivotIndex], a[high]);
+        T pivot = a[high];
+        int i = low - 1; // Indeks mniejszych elementów
+
+        for (int j = low; j < high; j++) {
+            if (a[j] < pivot) {
+                i++;
+                std::swap(a[i], a[j]);
+            }
+        }
+
+        std::swap(a[i + 1], a[high]);  // Umieszczamy pivota w odpowiednim miejscu
+        return i + 1;  // Zwracamy nową pozycję pivota
+    }
+
 public:
     template<typename T>
     static void InsertionSort(T tempArray[], int size, double &time) {
@@ -43,7 +109,7 @@ public:
             while (j >= 0 && tempArray[j] > key) {
                 //Przestwiamy element o jeden w prawo
                 tempArray[j + 1] = tempArray[j];
-                j = j - 1;
+                j--;
             }
             //Przypisujemy klucz w odpowiednie miejsce tabeli
             tempArray[j + 1] = key;
@@ -71,6 +137,59 @@ public:
         std::chrono::duration<double, std::milli> elapsed = end - start;
         time = elapsed.count();
     }
+
+    template<typename T>
+    static void ShellSort(T* a, int size, double &time, bool type) {
+        for (int k = 0; k < 10; k++) {
+            auto start = std::chrono::high_resolution_clock::now();
+            if (type == true) {
+                for (int gap = size / 2; gap > 0; gap /= 2) {
+                    for (int i = gap; i < size; i++) {
+                        T temporary = a[i];
+                        int j;
+                        for (j = i; j >= gap && a[j - gap] > temporary; j -= gap) {
+                            a[j] = a[j - gap];
+                        }
+                        a[j] = temporary;
+                    }
+                }
+            } else {
+                int gap = 1;
+                //Sprawdzamy największą możliwą przerwe
+                while (gap < size / 3) {
+                    gap = 3 * gap + 1;
+                }
+                while (gap >= 1) {
+                    for (int i = gap; i < size; i++) {
+                        T temp = a[i];
+                        int j = i;
+                        while (j >= gap && a[j - gap] > temp) {
+                            a[j] = a[j - gap];
+                            j -= gap;
+                        }
+                        a[j] = temp;
+                    }
+                    gap /= 3;
+                }
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> elapsed = end - start;
+            time = elapsed.count();
+        }
+    }
+
+    template<typename T>
+    static void QuickSort(T* a, int size, double &time, int type) {
+        auto start = std::chrono::high_resolution_clock::now();
+
+        QuickSortIterative(a, 0, size - 1, type);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+        time += elapsed.count();
+    }
+
+
 };
 
 #endif

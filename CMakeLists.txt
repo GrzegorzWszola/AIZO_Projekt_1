@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(AIZO_Project_1 main.cpp
         Algorythms.h
-        GUI.h)
+        GUI.h
+        RaportGeneration.h)

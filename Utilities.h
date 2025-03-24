@@ -4,24 +4,36 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <random>
+#include <bits/fs_fwd.h>
+#include <bits/fs_path.h>
 
 class Utilities {
 public:
-    static int* generateRandomIntArray(int size) {
-        auto arr = new int[size];
-        for (int i = 0; i < size; ++i) {
-            arr[i] = std::rand() % size;
+    template<typename T>
+    static T* generateRandomArray(int size, T minValue = 0, T maxValue = 0) {
+        if (maxValue <= minValue) {
+            maxValue = static_cast<T>(size - 1);
         }
-        return arr;
-    }
-
-    static float* generateRandomFloatArray(int size) {
-        auto arr = new float[size];
-        for (int i = 0; i < size; ++i) {
-            float newFloat = std::round(static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX)*100)/100;
-            arr[i] = newFloat + std::rand() % size;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        if constexpr (std::is_integral<T>::value) {
+            std::uniform_int_distribution<int> dist(static_cast<int>(minValue), static_cast<int>(maxValue));
+            auto arr = new T[size];
+            for (int i = 0; i < size; ++i) {
+                arr[i] = static_cast<T>(dist(gen));
+            }
+            return arr;
         }
-        return arr;
+        else if constexpr (std::is_floating_point<T>::value) {
+            std::uniform_real_distribution<T> dist(minValue, maxValue);
+            auto arr = new T[size];
+            for (int i = 0; i < size; ++i) {
+                arr[i] = dist(gen);
+            }
+            return arr;
+        }
+        return nullptr;
     }
 
     static bool isInt(const std::string& str) {
@@ -31,6 +43,9 @@ public:
     }
 
     static bool isFloatCheck(std::string filename) {
+        if (!filename.empty() && filename.front() == '"' && filename.back() == '"') {
+            filename = filename.substr(1, filename.length() - 2);
+        }
         if (filename.empty()) {
             throw invalid_argument("filename is empty");
         }
@@ -45,7 +60,7 @@ public:
     }
 
     static int* readAndGenerateIntTable(std::string& filePath, int& size) {
-        if (!filePath.empty() && filePath.front() == '\"' && filePath.back() == '\"') {
+        if (!filePath.empty() && filePath.front() == '"' && filePath.back() == '"') {
             filePath = filePath.substr(1, filePath.length() - 2);
         }
         std::ifstream file(filePath);
@@ -79,6 +94,7 @@ public:
         if (!filePath.empty() && filePath.front() == '"' && filePath.back() == '"') {
             filePath = filePath.substr(1, filePath.length() - 2);
         }
+
         std::ifstream file(filePath);
         if (!file.is_open()) {
             throw std::runtime_error("Nie udalo sie otworzyc pliku.");
@@ -111,45 +127,62 @@ public:
         return numbers;
     }
 
-    static int** generateTableCopies(int size, int* intTable) {
-        auto tableCopies = new int*[5];
-        auto intTableCopy = new int[size];
-        auto intTable33p = new int[size];
-        auto intTable66p = new int[size];
-        auto intTableSorted = new int[size];
-        auto intTableReverseSorted = new int[size];
-        memcpy(intTableCopy, intTable, sizeof(int)*size);
-        memcpy(intTable33p, intTable, sizeof(int)*size);
-        memcpy(intTable66p, intTable, sizeof(int)*size);
-        memcpy(intTableSorted, intTable, sizeof(int)*size);
-        memcpy(intTableReverseSorted, intTable, sizeof(int)*size);
-        std::sort(intTable33p, intTable33p + size/3);
-        std::sort(intTable66p, intTable66p + (2 * size / 3));
-        std::sort(intTableSorted, intTableSorted + size);
-        std::sort(intTableReverseSorted, intTableReverseSorted + size, std::greater<int>());
-        tableCopies[0] = intTableCopy;
-        tableCopies[1] = intTable33p;
-        tableCopies[2] = intTable66p;
-        tableCopies[3] = intTableSorted;
-        tableCopies[4] = intTableReverseSorted;
+    template<typename T>
+    static T** generateTableCopies(int size, T* intTable) {
+        auto tableCopies = new T*[5];
+        auto tableCopy = new T[size];
+        auto table33p = new T[size];
+        auto table66p = new T[size];
+        auto tableSorted = new T[size];
+        auto tableReverseSorted = new T[size];
+        memcpy(tableCopy, intTable, sizeof(T)*size);
+        memcpy(table33p, intTable, sizeof(T)*size);
+        memcpy(table66p, intTable, sizeof(T)*size);
+        memcpy(tableSorted, intTable, sizeof(T)*size);
+        memcpy(tableReverseSorted, intTable, sizeof(T)*size);
+        std::sort(table33p, table33p + size/3);
+        std::sort(table66p, table66p + (2 * size / 3));
+        std::sort(tableSorted, tableSorted + size);
+        std::sort(tableReverseSorted, tableReverseSorted + size, std::greater<T>());
+        tableCopies[0] = tableCopy;
+        tableCopies[1] = table33p;
+        tableCopies[2] = table66p;
+        tableCopies[3] = tableSorted;
+        tableCopies[4] = tableReverseSorted;
         return tableCopies;
     }
 
-    static void generateTableFloat(int size, float*& floatTable, float*& floatTableCopy, float*& floatTable33p, float*& floatTable66p, float*& floatTableSorted, float*& floatTableReverseSorted){
-        floatTableCopy = new float[size];
-        floatTable33p = new float[size];
-        floatTable66p = new float[size];
-        floatTableSorted = new float[size];
-        floatTableReverseSorted = new float[size];
-        memcpy(floatTableCopy, floatTable, sizeof(int)*size);
-        memcpy(floatTable33p, floatTable, sizeof(int)*size);
-        memcpy(floatTable66p, floatTable, sizeof(int)*size);
-        memcpy(floatTableSorted, floatTable, sizeof(int)*size);
-        memcpy(floatTableReverseSorted, floatTable, sizeof(int)*size);
-        std::sort(floatTable33p, floatTable33p + size/3);
-        std::sort(floatTable66p, floatTable66p + (2 * size / 3));
-        std::sort(floatTableSorted, floatTableSorted + size);
-        std::sort(floatTableReverseSorted, floatTableReverseSorted + size, std::greater<int>());
+    static void resetOutputFile() {
+        std::filesystem::path currentPath = std::filesystem::current_path();
+        std::string fileName = currentPath.parent_path().string() + "\\output.txt";
+        std::ofstream file(fileName, std::ios::trunc);
+        file.close();
+    }
+
+    static void writeSortType(std::string sortType) {
+        std::filesystem::path currentPath = std::filesystem::current_path();
+        std::string fileName = currentPath.parent_path().string() + "\\output.txt";
+        std::ofstream file(fileName, std::ios::app);
+        file << sortType << endl;
+        file.close();
+    }
+
+    static void writeToFile(std::string name, double time) {
+        std::filesystem::path currentPath = std::filesystem::current_path();
+        std::string fileName = currentPath.parent_path().string() + "\\output.txt";
+        std::ofstream file(fileName, std::ios::app);
+        file << name << ";" << time << std::endl;
+        file.close();
+    }
+
+    template <typename T>
+    static bool isSorted(T* arr, int size) {
+        for (int i = 0; i < size - 1; ++i) {
+            if (arr[i] > arr[i + 1]) {
+                return false;
+            }
+        }
+        return true;
     }
 };
 
