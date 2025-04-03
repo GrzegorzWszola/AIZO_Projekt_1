@@ -1,35 +1,48 @@
 Insertion Sort;
-Losowa kolejność;18588.3
-33% posortowana;16611.4
-66% posortowana;10363
-posortowana;0.567
-posortowana odwrotnie;37597.7
+Losowa kolejność;41444.9
+33% posortowana;37004.3
+66% posortowana;23379.2
+posortowana;0.80605
+posortowana odwrotnie;83399.6
 Heap Sort;
-Losowa kolejność;48.5424
-33% posortowana;46.2723
-66% posortowana;45.6944
-posortowana;39.7956
-posortowana odwrotnie;37.8346
+Losowa kolejność;74.8814
+33% posortowana;71.2321
+66% posortowana;66.3956
+posortowana;59.2184
+posortowana odwrotnie;56.2679
 Shell Sort n/2;
-Losowa kolejność;9.2051
-33% posortowana;9.277
-66% posortowana;9.2585
-posortowana;9.3705
-posortowana odwrotnie;9.1034
+Losowa kolejność;14.5671
+33% posortowana;14.5792
+66% posortowana;14.5638
+posortowana;14.5312
+posortowana odwrotnie;14.5393
 Shell Sort optymalne;
-Losowa kolejność;5.2646
-33% posortowana;5.2677
-66% posortowana;5.1954
-posortowana;5.22
-posortowana odwrotnie;5.6283
+Losowa kolejność;8.02665
+33% posortowana;8.1561
+66% posortowana;8.151
+posortowana;8.20945
+posortowana odwrotnie;8.0319
 Quick Sort prawy;
-Losowa kolejność;38.6163
-33% posortowana;38.206
-66% posortowana;38.7661
-posortowana;79123
-posortowana odwrotnie;63531.8
+Losowa kolejność;88.9544
+33% posortowana;86.0079
+66% posortowana;84.7032
+posortowana;259196
+posortowana odwrotnie;209250
 Quick Sort lewy;
-Losowa kolejność;37.81
-33% posortowana;41.7463
-66% posortowana;50.0523
-posortowana;38223.3
+Losowa kolejność;87.9377
+33% posortowana;96.7151
+66% posortowana;107.605
+posortowana;127841
+posortowana odwrotnie;209843
+Quick Sort srodkowy;
+Losowa kolejność;87.0549
+33% posortowana;84.166
+66% posortowana;98.6437
+posortowana;51.1609
+posortowana odwrotnie;55.6932
+Quick Sort losowy;
+Losowa kolejność;93.793
+33% posortowana;88.5088
+66% posortowana;82.4445
+posortowana;69.3471
+posortowana odwrotnie;80.6056
