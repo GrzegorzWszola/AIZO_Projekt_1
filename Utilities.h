@@ -87,6 +87,10 @@ public:
             delete[] numbers;
             throw std::invalid_argument("File contains fewer numbers than expected.");
         }
+        for (int i = 0; i < size; ++i) {
+            cout << numbers[i] << " ";
+        }
+        system("pause");
         return numbers;
     }
 
@@ -124,6 +128,10 @@ public:
             delete[] numbers;
             throw std::invalid_argument("Plik zawiera mniej liczb niż oczekiwano.");
         }
+        for (int i = 0; i < size; ++i) {
+            cout << numbers[i] << " ";
+        }
+        system("pause");
         return numbers;
     }
 

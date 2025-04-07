@@ -34,7 +34,6 @@ int main() {
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 
-
             if (choice == 1) {
                 Utilities::resetOutputFile();
                 Utilities::writeSortType("Insertion Sort;");
@@ -92,6 +91,7 @@ int main() {
                         } else {
                             intTable = Utilities::readAndGenerateIntTable(input, size);
                         }
+
                     }
                     catch (invalid_argument &e) {cout << e.what();}
                     catch (runtime_error &e) {cout << e.what();}

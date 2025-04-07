@@ -140,53 +140,51 @@ public:
 
     template<typename T>
     static void ShellSort(T* a, int size, double &time, bool type) {
-        for (int k = 0; k < 10; k++) {
-            auto start = std::chrono::high_resolution_clock::now();
-            if (type == true) {
-                for (int gap = size / 2; gap > 0; gap /= 2) {
-                    for (int i = gap; i < size; i++) {
-                        T temporary = a[i];
-                        int j;
-                        for (j = i; j >= gap && a[j - gap] > temporary; j -= gap) {
-                            a[j] = a[j - gap];
-                        }
-                        a[j] = temporary;
+        auto start = std::chrono::high_resolution_clock::now();
+        if (type == true) {
+            for (int gap = size / 2; gap > 0; gap /= 2) {
+                for (int i = gap; i < size; i++) {
+                    T temporary = a[i];
+                    int j;
+                    for (j = i; j >= gap && a[j - gap] > temporary; j -= gap) {
+                        a[j] = a[j - gap];
                     }
-                }
-            } else {
-                int gap = 1;
-                //Sprawdzamy największą możliwą przerwe
-                while (gap < size / 3) {
-                    gap = 3 * gap + 1;
-                }
-                while (gap >= 1) {
-                    for (int i = gap; i < size; i++) {
-                        T temp = a[i];
-                        int j = i;
-                        while (j >= gap && a[j - gap] > temp) {
-                            a[j] = a[j - gap];
-                            j -= gap;
-                        }
-                        a[j] = temp;
-                    }
-                    gap /= 3;
+                    a[j] = temporary;
                 }
             }
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> elapsed = end - start;
-            time = elapsed.count();
+        } else {
+            int gap = 1;
+            //Sprawdzamy największą możliwą przerwe
+            while (gap < size / 3) {
+                gap = 3 * gap + 1;
+            }
+            while (gap >= 1) {
+                for (int i = gap; i < size; i++) {
+                    T temp = a[i];
+                    int j = i;
+                    while (j >= gap && a[j - gap] > temp) {
+                        a[j] = a[j - gap];
+                        j -= gap;
+                    }
+                    a[j] = temp;
+                }
+                gap /= 3;
+            }
         }
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+        time = elapsed.count();
     }
 
     template<typename T>
     static void QuickSort(T* a, int size, double &time, int type) {
         auto start = std::chrono::high_resolution_clock::now();
 
-        QuickSortIterative(a, 0, size - 1, type);
+        QuickSortRecursive(a, 0, size - 1, type);
 
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> elapsed = end - start;
-        time += elapsed.count();
+        time = elapsed.count();
     }
 
 
